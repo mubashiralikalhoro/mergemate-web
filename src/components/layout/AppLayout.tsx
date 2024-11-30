@@ -7,10 +7,10 @@ interface Props {
 
 const AppLayout = ({ children }: Props) => {
   return (
-    <div className="flex flex-col items-center w-screen h-[100dvh] ">
+    <div className="flex flex-col items-center w-screen min-h-[100dvh] overflow-x-hidden">
       <div className="h-[60px]" />
       <Navbar />
-      <div className="max-w-5xl w-full">{children}</div>
+      {children}
     </div>
   );
 };
