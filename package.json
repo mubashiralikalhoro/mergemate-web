@@ -9,16 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "classnames": "^2.5.1",
+    "cobe": "^0.6.3",
+    "next": "15.0.3",
+    "next-auth": "^4.24.10",
     "react": "19.0.0-rc-66855b96-20241106",
+    "react-advanced-cropper": "^0.20.0",
     "react-dom": "19.0.0-rc-66855b96-20241106",
-    "next": "15.0.3"
+    "react-icons": "^5.3.0",
+    "react-modal": "^3.16.1"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-modal": "^3.16.3",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }
