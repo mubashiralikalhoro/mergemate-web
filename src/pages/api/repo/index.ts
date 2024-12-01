@@ -56,6 +56,7 @@ app.post(async (req, res) => {
     // Return success response
     res.status(200).json(sendResponse(json));
   } catch (error: any) {
+    console.log("error ----->", error);
     res.status(400).json(sendError(error?.message || "Invalid request body"));
   }
 });
