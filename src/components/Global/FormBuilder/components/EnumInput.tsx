@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import DropDown from '../../DropDown';
-import classNames from 'classnames';
+import React, { useState } from "react";
+import DropDown from "../../DropDown";
+import classNames from "classnames";
 
 type Props = {
   value: any;
@@ -19,7 +19,7 @@ const EnumInput = ({
   onChange,
   options,
   className,
-  containerClassName = '',
+  containerClassName = "",
   label,
   error,
   isEditable = true,
@@ -33,18 +33,14 @@ const EnumInput = ({
         {label && <div className={labelClassName}>{label}</div>}
         {error && <div className="text-sm text-red-500  px-2 ">{error}</div>}
       </div>
-      <div className={classNames(className, 'relative ')}>
+      <div className={classNames(className, "relative")}>
         <div
           className={classNames(
             `my-input ${
-              isOpen
-                ? 'border-focus-color'
-                : error
-                ? 'border-error-color'
-                : 'border-color'
+              isOpen ? "border-focus-color" : error ? "border-error-color" : "border-color"
             } flex cursor-pointer `,
             {
-              'text-gray-500': !value,
+              "text-gray-500": !value,
             }
           )}
           onClick={() => {
@@ -53,9 +49,7 @@ const EnumInput = ({
             }
           }}
         >
-          {value
-            ? options.find((item) => item.value === value)?.label
-            : 'Select...'}
+          {value ? options.find((item) => item.value === value)?.label : "Select..."}
         </div>
         <div>
           <DropDown
@@ -64,7 +58,7 @@ const EnumInput = ({
             sections={[
               [
                 {
-                  content: 'Select...',
+                  content: "Select...",
                   onClick: () => {
                     onChange(null);
                     setIsOpen(false);

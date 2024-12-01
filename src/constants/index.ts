@@ -3,7 +3,7 @@ const constants = {
   TAG_LINE: "Connecting Coders, Empowering Open Source",
 };
 
-const TechStacks = [
+export const TechStacks = [
   "React",
   "Next.js",
   "Vue.js",
@@ -93,5 +93,10 @@ const TechStacks = [
   "Vercel",
   "Netlify",
 ];
+
+export const techStackOptions = TechStacks.map((tech) => ({
+  value: tech,
+  label: tech,
+}));
 
 export default constants;

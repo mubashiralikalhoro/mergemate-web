@@ -22,7 +22,7 @@ interface Props {
   loadValue?: (v: any) => any;
 }
 
-const SelectInput = ({
+const MultiSelectInput = ({
   value,
   placeholder,
   handleBlur,
@@ -36,8 +36,8 @@ const SelectInput = ({
   isEditable = true,
   labelClassName,
   onChange,
-  loadValue,
   containerClassName = "",
+  loadValue,
 }: Props) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   return (
@@ -45,17 +45,18 @@ const SelectInput = ({
       <InputField
         onChange={(e) => onSearchChange(e.target.value)}
         startView={
-          value && (
+          value &&
+          value?.map((v: any) => (
             <div
               className="my-container  bg-background-focused px-2 gap-2  mr-2 text-md rounded  items-center flex justify-center w-fit"
               onClick={() => {
-                onChange(null);
+                onChange(value.filter((e: any) => e !== v));
               }}
             >
-              {loadValue ? loadValue(value) : options.find((item) => item.value === value)?.label}
-              <IoIosClose className="hover:scale-110 cursor-pointer text-lg text-red-500" />
+              {loadValue ? loadValue(v) : options.find((item) => item.value === v)?.label}
+              <IoIosClose className="hover:scale-110 cursor-pointer text-xl text-red-500" />
             </div>
-          )
+          ))
         }
         isEditable={isEditable}
         labelClassName={labelClassName}
@@ -85,13 +86,15 @@ const SelectInput = ({
             isOpen={isDropDownOpen}
             sections={[
               [
-                ...options.map((option) => ({
-                  content: option.label,
-                  onClick: () => {
-                    onChange(option.value);
-                    setIsDropDownOpen(false);
-                  },
-                })),
+                ...options
+                  ?.filter((item) => value?.findIndex((e: any) => e === item.value) === -1)
+                  .map((option) => ({
+                    content: option.label,
+                    onClick: () => {
+                      onChange([...value, option.value]);
+                      setIsDropDownOpen(false);
+                    },
+                  })),
               ],
             ]}
           />
@@ -101,4 +104,4 @@ const SelectInput = ({
   );
 };
 
-export default SelectInput;
+export default MultiSelectInput;

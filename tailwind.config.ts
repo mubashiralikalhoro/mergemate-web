@@ -16,6 +16,7 @@ export default {
         "grayed-out": "#9098A1",
         "gray-1": "#3C444D",
         primary: "#238636",
+        "git-orange": "rgb(247,129,102)",
       },
     },
   },

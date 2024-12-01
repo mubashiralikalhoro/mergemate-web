@@ -6,11 +6,9 @@ import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import { useUserContext } from "@/context/UserContext";
 
-const UserDropDown = () => {
+const UserDropDown = ({ user }: { user: User }) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-
-  const { user } = useUserContext();
 
   const handleLogout = () => {
     signOut();

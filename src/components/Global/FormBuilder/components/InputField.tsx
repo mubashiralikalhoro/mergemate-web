@@ -1,31 +1,25 @@
-import classNames from 'classnames';
-import React from 'react';
+import classNames from "classnames";
+import React from "react";
 
 type Props = {
   name?: string;
   className?: string;
   placeholder?: string;
   value: any;
-  onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   error?: string | undefined | null | boolean;
   type?: string;
   multiline?: boolean;
-  onBlur?: (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   [key: string]: any;
   suggestions?: string[];
   label?: string;
-  onFocus?: (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   startView?: React.ReactNode;
   isEditable?: boolean;
   labelClassName?: any;
   containerClassName?: string;
-  direction?: 'vertical' | 'horizontal';
+  direction?: "vertical" | "horizontal";
 };
 
 const InputField = ({
@@ -45,29 +39,20 @@ const InputField = ({
   labelClassName,
   containerClassName,
   isEditable = true,
-  direction = 'vertical',
+  direction = "vertical",
   ...props
 }: Props) => {
   return (
     <div
       className={`flex items-center justify-end w-full ${
-        direction === 'horizontal' ? 'flex-row' : 'flex-col'
+        direction === "horizontal" ? "flex-row" : "flex-col"
       } ${containerClassName}`}
     >
       <div className="flex w-full justify-between ">
         {label && <div className={`form-label ${labelClassName}`}>{label}</div>}
       </div>
-      <div
-        className={classNames(
-          'relative w-full border border-slate-400  p-2 rounded-md',
-          className
-        )}
-      >
-        <div
-          className={` my-input my-focus w-full flex ${
-            error ? 'border-error-color' : 'border-color'
-          }`}
-        >
+      <div className={classNames("my-input", className)}>
+        <div className={` my-focus w-full flex ${error ? "border-error-color" : "border-color"}`}>
           {startView}
           {multiline ? (
             <textarea
@@ -96,11 +81,7 @@ const InputField = ({
               list="suggest"
             />
           )}
-          {error && (
-            <div className="text-sm text-red-500 -top-2 right-2 px-2 ">
-              {error}
-            </div>
-          )}
+          {error && <div className="text-sm text-red-500 -top-2 right-2 px-2 ">{error}</div>}
         </div>
         <datalist id="suggest">
           {suggestions?.map((item, index) => (

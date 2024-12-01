@@ -36,29 +36,41 @@ const caller = async <T>(
     error = err?.response?.data?.error?.message || err?.message || "Something went wrong";
   }
 
-  return [response, error] as [AxiosResponse<any, T>, err: string];
+  return [
+    {
+      data: response?.data,
+      error: null,
+    },
+    error,
+  ] as [
+    {
+      data: T;
+      error: null;
+    },
+    err: string
+  ];
 };
 
 const api = {
   app: {
     get: async <T>(url: string, config?: AxiosRequestConfig<any>) =>
-      caller<T>("app", "get", url, undefined, config) as Promise<[AxiosResponse<T> | null, string]>,
+      caller<T>("app", "get", url, undefined, config),
     delete: async <T>(url: string, config?: AxiosRequestConfig<any>) =>
-      caller<T>("app", "delete", url, undefined, config) as Promise<[AxiosResponse<T> | null, string]>,
+      caller<T>("app", "delete", url, undefined, config),
     post: async <T>(url: string, data: any, config?: AxiosRequestConfig<any>) =>
-      caller<T>("app", "post", url, data, config) as Promise<[AxiosResponse<T> | null, string]>,
+      caller<T>("app", "post", url, data, config),
     put: async <T>(url: string, data: any, config?: AxiosRequestConfig<any>) =>
-      caller<T>("app", "put", url, data, config) as Promise<[AxiosResponse<T> | null, string]>,
+      caller<T>("app", "put", url, data, config),
   },
   github: {
     get: async <T>(url: string, config?: AxiosRequestConfig<any>) =>
-      caller<T>("github", "get", url, undefined, config) as Promise<[AxiosResponse<T> | null, string]>,
+      caller<T>("github", "get", url, undefined, config),
     delete: async <T>(url: string, config?: AxiosRequestConfig<any>) =>
-      caller<T>("github", "delete", url, undefined, config) as Promise<[AxiosResponse<T> | null, string]>,
+      caller<T>("github", "delete", url, undefined, config),
     post: async <T>(url: string, data: any, config?: AxiosRequestConfig<any>) =>
-      caller<T>("github", "post", url, data, config) as Promise<[AxiosResponse<T> | null, string]>,
+      caller<T>("github", "post", url, data, config),
     put: async <T>(url: string, data: any, config?: AxiosRequestConfig<any>) =>
-      caller<T>("github", "put", url, data, config) as Promise<[AxiosResponse<T> | null, string]>,
+      caller<T>("github", "put", url, data, config),
   },
 };
 

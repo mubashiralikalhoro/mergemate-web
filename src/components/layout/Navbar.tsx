@@ -3,8 +3,10 @@ import { HiMenu } from "react-icons/hi";
 import Logo from "../Logo";
 import Link from "next/link";
 import UserDropDown from "../App/UserDropDown";
+import { useUserContext } from "@/context/UserContext";
 
 const Navbar = () => {
+  const { user } = useUserContext();
   return (
     <nav className="fixed w-screen ">
       <div
@@ -24,7 +26,13 @@ const Navbar = () => {
         </div>
 
         <div>
-          <UserDropDown />
+          {user ? (
+            <UserDropDown user={user} />
+          ) : (
+            <Link href={"/auth/login"}>
+              <div className="bg-primary my-button ">Login</div>
+            </Link>
+          )}
         </div>
       </div>
     </nav>

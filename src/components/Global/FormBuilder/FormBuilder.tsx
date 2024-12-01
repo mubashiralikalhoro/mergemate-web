@@ -1,27 +1,29 @@
-import * as Yup from 'yup';
-import { Formik } from 'formik';
-import ImageCropInput from './components/ImageCropInput';
-import InputField from './components/InputField';
-import SelectInput from './components/SelectInput';
-import EnumInput from './components/EnumInput';
-import ColorInput from './components/ColorInput';
-import { useEffect } from 'react';
+import * as Yup from "yup";
+import { Formik } from "formik";
+import ImageCropInput from "./components/ImageCropInput";
+import InputField from "./components/InputField";
+import SelectInput from "./components/SelectInput";
+import EnumInput from "./components/EnumInput";
+import ColorInput from "./components/ColorInput";
+import { useEffect } from "react";
+import MultiSelectInput from "./components/MultiSelectInput";
 
 type InputType =
-  | 'text'
-  | 'number'
-  | 'email'
-  | 'password'
-  | 'textarea'
-  | 'image'
-  | 'radio'
-  | 'checkbox'
-  | 'date'
-  | 'select'
-  | 'gap'
-  | 'enum'
-  | 'color'
-  | 'view';
+  | "text"
+  | "number"
+  | "email"
+  | "password"
+  | "textarea"
+  | "image"
+  | "radio"
+  | "checkbox"
+  | "date"
+  | "select"
+  | "gap"
+  | "enum"
+  | "color"
+  | "view"
+  | "multiselect";
 
 export interface FormItem {
   fieldName: string;
@@ -34,16 +36,13 @@ export interface FormItem {
   className?: string;
   yupSchema?: Yup.Schema<any>;
   loadValue?: (values: any) => any;
-  direction?: 'vertical' | 'horizontal';
+  direction?: "vertical" | "horizontal";
   labelClassName?: string;
   containerClassName?: string;
   isVisible?: (values: any) => any;
-  onSelectSearchChange?: (
-    text: any,
-    setValues: (newValues: any) => any,
-    values: any
-  ) => void;
+  onSelectSearchChange?: (text: any, setValues: (newValues: any) => any, values: any) => void;
   selectSearchValue?: string;
+  loadSelectValue?: (v: any) => any;
   CustomView?: ({
     values,
     errors,
@@ -69,18 +68,11 @@ type FormBuilderProps = {
   value: any;
   className?: string;
   onSubmit: (values: { [key: string]: any }) => void;
-  SubmitButton?: ({
-    isValid,
-    submit,
-  }: {
-    isValid: boolean;
-    submit?: () => any;
-  }) => React.ReactNode;
+  SubmitButton?: ({ isValid, submit }: { isValid: boolean; submit?: () => any }) => React.ReactNode;
   design: FormItem[];
   isEditable?: boolean;
-  yupSchema?: {
-    [key: string]: Yup.Schema<any>;
-  };
+  yupSchema?: Yup.Schema<any>;
+
   labelStyles?: any;
   customSubmit?: boolean;
 };
@@ -94,25 +86,23 @@ const FormBuilder = ({
   isEditable = true,
   labelStyles,
   customSubmit,
-
-  yupSchema = {},
+  yupSchema,
 }: FormBuilderProps) => {
-  const getSchema = (design: FormBuilderProps['design']) => {
+  const getSchema = (design: FormBuilderProps["design"]) => {
+    if (yupSchema) {
+      return yupSchema;
+    }
+
     const obj: any = {};
     design.forEach((item) => {
       if (item.yupSchema) {
         obj[item.fieldName] = item.yupSchema;
       }
     });
-
-    Object.keys(yupSchema).forEach((key) => {
-      obj[key] = yupSchema[key];
-    });
-
     return Yup.object().shape(obj);
   };
   return (
-    <div className=" ">
+    <div className="w-full">
       <Formik
         initialValues={value}
         onSubmit={(values) => {
@@ -140,7 +130,7 @@ const FormBuilder = ({
               }
 
               switch (item.inputType) {
-                case 'view':
+                case "view":
                   return CustomView ? (
                     <CustomView
                       key={index}
@@ -155,10 +145,10 @@ const FormBuilder = ({
                     />
                   ) : null;
 
-                case 'gap':
+                case "gap":
                   return <div key={index} className={item.className} />;
 
-                case 'enum':
+                case "enum":
                   return (
                     <EnumInput
                       labelClassName={item.labelClassName}
@@ -167,11 +157,7 @@ const FormBuilder = ({
                       label={item.label}
                       error={errors[item.fieldName]}
                       className={item.className}
-                      value={
-                        item.loadValue
-                          ? item.loadValue(values)
-                          : values[item.fieldName]
-                      }
+                      value={item.loadValue ? item.loadValue(values) : values[item.fieldName]}
                       onChange={(base64) => {
                         if (item.onChange) {
                           item.onChange(base64, setValues as any, values);
@@ -183,16 +169,14 @@ const FormBuilder = ({
                       isEditable={isEditable}
                     />
                   );
-                case 'color':
+                case "color":
                   return (
                     <ColorInput
                       key={index}
                       label={item.label}
                       name={item.fieldName}
                       value={
-                        item.loadValue
-                          ? item.loadValue(values)
-                          : values[item.fieldName] || '#000000' // Default to black if no value
+                        item.loadValue ? item.loadValue(values) : values[item.fieldName] || "#000000" // Default to black if no value
                       }
                       onChange={(value) => {
                         if (item.onChange) {
@@ -206,15 +190,14 @@ const FormBuilder = ({
                       }}
                       className={item.className}
                       error={
-                        touched[item.fieldName] &&
-                        typeof errors[item.fieldName] === 'string'
+                        touched[item.fieldName] && typeof errors[item.fieldName] === "string"
                           ? (errors[item.fieldName] as string)
                           : undefined
                       }
                       isEditable={isEditable}
                     />
                   );
-                case 'image':
+                case "image":
                   return (
                     <ImageCropInput
                       labelClassName={item.labelClassName}
@@ -224,11 +207,7 @@ const FormBuilder = ({
                       name={item.fieldName}
                       aspectRatio={item.imageAspectRatio || 1}
                       className={item.className}
-                      value={
-                        item.loadValue
-                          ? item.loadValue(values)
-                          : values[item.fieldName]
-                      }
+                      value={item.loadValue ? item.loadValue(values) : values[item.fieldName]}
                       //  @ts-ignore
                       error={errors[item.fieldName]}
                       onChange={(base64) => {
@@ -241,7 +220,38 @@ const FormBuilder = ({
                     />
                   );
 
-                case 'select':
+                case "multiselect":
+                  return (
+                    <MultiSelectInput
+                      containerClassName={item.containerClassName}
+                      labelClassName={item.labelClassName}
+                      isEditable={isEditable}
+                      onChange={(selectedValue) => {
+                        setValues({
+                          ...values,
+                          [item.fieldName]: selectedValue,
+                        });
+                      }}
+                      loadValue={item.loadSelectValue}
+                      label={item.label}
+                      options={item.options!}
+                      searchValue={item.selectSearchValue}
+                      className={item.className}
+                      name={item.fieldName}
+                      placeholder={item.placeholder}
+                      onSearchChange={(text) => {
+                        if (item.onSelectSearchChange) {
+                          item.onSelectSearchChange(text, setValues as any, values);
+                        }
+                      }}
+                      error={touched.hasOwnProperty(item.fieldName) && errors[item.fieldName]}
+                      handleBlur={handleBlur}
+                      value={item.loadValue ? item.loadValue(values) : values[item.fieldName]}
+                      key={index}
+                    />
+                  );
+
+                case "select":
                   return (
                     <SelectInput
                       containerClassName={item.containerClassName}
@@ -253,6 +263,7 @@ const FormBuilder = ({
                           [item.fieldName]: selectedValue,
                         });
                       }}
+                      loadValue={item.loadSelectValue}
                       label={item.label}
                       options={item.options!}
                       searchValue={item.selectSearchValue}
@@ -261,23 +272,12 @@ const FormBuilder = ({
                       placeholder={item.placeholder}
                       onSearchChange={(text) => {
                         if (item.onSelectSearchChange) {
-                          item.onSelectSearchChange(
-                            text,
-                            setValues as any,
-                            values
-                          );
+                          item.onSelectSearchChange(text, setValues as any, values);
                         }
                       }}
-                      error={
-                        touched.hasOwnProperty(item.fieldName) &&
-                        errors[item.fieldName]
-                      }
+                      error={touched.hasOwnProperty(item.fieldName) && errors[item.fieldName]}
                       handleBlur={handleBlur}
-                      value={
-                        item.loadValue
-                          ? item.loadValue(values)
-                          : values[item.fieldName]
-                      }
+                      value={item.loadValue ? item.loadValue(values) : values[item.fieldName]}
                       key={index}
                     />
                   );
@@ -298,19 +298,12 @@ const FormBuilder = ({
                         }
                       }}
                       label={item.label}
-                      value={
-                        item.loadValue
-                          ? item.loadValue(values)
-                          : values[item.fieldName]
-                      }
+                      value={item.loadValue ? item.loadValue(values) : values[item.fieldName]}
                       className={item.className}
                       //   @ts-ignore
-                      error={
-                        touched.hasOwnProperty(item.fieldName) &&
-                        errors[item.fieldName]
-                      }
+                      error={touched.hasOwnProperty(item.fieldName) && errors[item.fieldName]}
                       key={index}
-                      multiline={item.inputType === 'textarea'}
+                      multiline={item.inputType === "textarea"}
                       name={item.fieldName}
                       onBlur={handleBlur}
                       placeholder={item.placeholder}
@@ -323,11 +316,7 @@ const FormBuilder = ({
             {isEditable && (
               <>
                 {customSubmit ? (
-                  <>
-                    {SubmitButton && (
-                      <SubmitButton isValid={isValid} submit={handleSubmit} />
-                    )}
-                  </>
+                  <>{SubmitButton && <SubmitButton isValid={isValid} submit={handleSubmit} />}</>
                 ) : (
                   <button type="submit" className="col-span-full">
                     {SubmitButton && <SubmitButton isValid={isValid} />}

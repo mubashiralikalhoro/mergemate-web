@@ -117,6 +117,9 @@ interface Repository {
 }
 
 interface AppRepo {
+  _id: string;
+  creatorEmail?: string;
+  contributorEmails?: [];
   description: string;
   contributionGuidelines: string;
   difficulty: "easy" | "medium" | "hard";
@@ -130,3 +133,12 @@ interface User {
   name?: string;
   githubProfile: GithubProfile;
 }
+
+interface GetAppRepoFromApiReturn {
+  repos: AppRepo[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+type SwipeType = "like" | "nope" | "superlike";

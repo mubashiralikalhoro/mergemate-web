@@ -19,7 +19,7 @@ const DropDown = ({ sections = [], isOpen, className }: Props) => {
       <div
         id=""
         className={classNames(
-          "z-10  bg-background-focused divide-y divide-gray-1 rounded-lg shadow w-44 px-2 overflow-hidden right-0",
+          "z-10  bg-background-focused max-h-56 scrollbar-hide overflow-y-scroll divide-y divide-gray-1 rounded-lg shadow w-44 px-2 overflow-x-hidden right-0",
           className
         )}
       >

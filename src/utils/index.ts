@@ -11,3 +11,17 @@ export const toProfilePage = {
     permanent: false,
   },
 };
+
+export const sendError = (message: string) => {
+  return {
+    error: message,
+    data: null,
+  };
+};
+
+export const sendResponse = (data: any) => {
+  return {
+    error: null,
+    data,
+  };
+};

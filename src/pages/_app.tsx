@@ -1,21 +1,26 @@
+import Logo from "@/components/Logo";
 import UserContext from "@/context/UserContext";
 import "@/styles/globals.css";
 import { SessionProvider, useSession } from "next-auth/react";
 import type { AppProps } from "next/app";
 import React, { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 
 export default function App({ Component, pageProps }: AppProps) {
   // @ts-ignore
   const Layout = Component.Layout ? Component.Layout : React.Fragment;
 
   return (
-    <SessionProvider>
-      <DataWrapper>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </DataWrapper>
-    </SessionProvider>
+    <>
+      <SessionProvider>
+        <DataWrapper>
+          <Toaster position="top-center" reverseOrder={false} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </DataWrapper>
+      </SessionProvider>
+    </>
   );
 }
 
@@ -41,7 +46,13 @@ const DataWrapper = ({ children }: { children: React.ReactNode }) => {
         setUser,
       }}
     >
-      {session.status === "loading" ? "Loading..." : children}
+      {session.status === "loading" ? (
+        <div className="w-screen h-[100dvh] flex items-center justify-center">
+          <Logo className="animate-pulse" />
+        </div>
+      ) : (
+        children
+      )}
     </UserContext.Provider>
   );
 };
