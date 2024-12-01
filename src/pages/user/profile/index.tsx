@@ -125,37 +125,42 @@ const ProfilePage = ({ repos }: Props) => {
       <div className="my-container p-2">
         <div className="">
           {activeSection === options[2] && (
-            <ul className="space-y-4 p-2">
-              {repos.map((repo, index) => (
-                <li key={index} className="my-container p-2 px-4 rounded-lg ">
-                  <div className="flex justify-between items-center gap-4">
-                    <div>
-                      <h3 className="text-lg font-semibold">{repo.name}</h3>
-                      <p className="text-gray-500">{repo.description}</p>
-                      <div className="flex items-center space-x-2">
-                        <div className="text-xs text-gray-500">{repo.forks} Forks</div>
-                        <div className="text-xs text-gray-500">{repo.stargazers_count} Stars</div>
-                        <div className="text-xs text-gray-500">{repo.watchers} Watchers</div>
+            <>
+              <ul className="space-y-4 p-2">
+                <div className="flex items-center justify-between mb-2">
+                  <h1 className="text-2xl font-bold">Repository</h1>
+                </div>
+                {repos.map((repo, index) => (
+                  <li key={index} className="my-container p-2 px-4 rounded-lg ">
+                    <div className="flex justify-between items-center gap-4">
+                      <div>
+                        <h3 className="text-lg font-semibold">{repo.name}</h3>
+                        <p className="text-gray-500">{repo.description}</p>
+                        <div className="flex items-center space-x-2">
+                          <div className="text-xs text-gray-500">{repo.forks} Forks</div>
+                          <div className="text-xs text-gray-500">{repo.stargazers_count} Stars</div>
+                          <div className="text-xs text-gray-500">{repo.watchers} Watchers</div>
+                        </div>
+                        <p className="text-gray-500 text-xs mt-2">
+                          {new Date(repo.created_at).toDateString().substring(4)}
+                        </p>
                       </div>
-                      <p className="text-gray-500 text-xs mt-2">
-                        {new Date(repo.created_at).toDateString().substring(4)}
-                      </p>
+                      <div className="flex items-center space-x-2">
+                        <Link href={repo.html_url} target="_blank" className="hover:scale-110 duration-300">
+                          <FaGithub className="text-4xl " />
+                        </Link>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Link href={repo.html_url} target="_blank" className="hover:scale-110 duration-300">
-                        <FaGithub className="text-4xl " />
-                      </Link>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
 
           {activeSection === options[1] && (
             <div className="p-2">
               <div className="flex items-center justify-between mb-2">
-                <h1 className="text-2xl font-bold">Repos</h1>
+                <h1 className="text-2xl font-bold">Repository</h1>
                 <div
                   onClick={() => {
                     setAddRepoModal(true);

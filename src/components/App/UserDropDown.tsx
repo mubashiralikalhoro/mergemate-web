@@ -22,7 +22,7 @@ const UserDropDown = ({ user }: { user: User }) => {
     <div className="w-12 aspect-square">
       <img
         onClick={() => {
-          setIsOpen((p) => !p);
+          router.pathname.includes("/discover") ? router.push("/user/profile") : setIsOpen((p) => !p);
         }}
         src={user?.image || "/images/user-placeholder.png"}
         alt="avatar"

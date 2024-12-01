@@ -65,14 +65,14 @@ const Card: React.FC<Props> = ({ data, removeCard, active }) => {
 };
 
 const CardComponent = ({ data }: { data: AppRepo }) => (
-  <div className="w-full h-full p-4">
+  <div className="w-full h-full p-4 overflow-y-scroll scrollbar-hide ">
     <div className="mt-5 w-full flex items-center gap-4">
       <Image
         alt="user"
         src={data?.repo?.owner?.avatar_url || "/images/user-placeholder.png"}
-        className="w-[100px] md:w-[50px] aspect-square rounded-full"
-        width={50}
-        height={50}
+        className="md:w-[100px] w-[50px] aspect-square rounded-full"
+        width={100}
+        height={100}
       />
       <div className="">
         <p className="">@{data?.repo.owner?.login}</p>
