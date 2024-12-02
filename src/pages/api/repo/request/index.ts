@@ -4,6 +4,7 @@ import { sendError, sendResponse } from "@/utils";
 import ExpressLikeNextApiHandler from "express-like-next-api-handler";
 import AppRepoRequest from "@/api/db/models/AppRepoRequest";
 import AppRepo from "@/api/db/models/AppRepo";
+import { sendNotification } from "@/api/util";
 
 const { app, handler } = ExpressLikeNextApiHandler();
 app.use(connectToDatabase);
@@ -28,6 +29,25 @@ app.post(async (req, res) => {
 
     // Save to database
     const savedRequest = await newRequest.save();
+
+    console.log("savedRequest -> ", savedRequest);
+
+    // sending notification in bg
+    {
+      AppRepo.findById(appRepoId).then((appRepo) => {
+        console.log("appRepo -> ", appRepo);
+        if (appRepo) {
+          const creatorEmail = appRepo.creatorEmail;
+          sendNotification(
+            "New Request",
+            `New request for ${appRepo.repo.name} by ${requestByName}`,
+            creatorEmail
+          );
+        }
+      });
+    }
+
+    // sendNotification("New Request", `New request for ${appRepoId} by ${requestByName}`, requestByEmail);
 
     // Respond with success
     res.status(200).json(sendResponse(savedRequest));

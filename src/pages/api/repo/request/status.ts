@@ -2,6 +2,7 @@ import AppRepo from "@/api/db/models/AppRepo";
 import AppRepoRequest from "@/api/db/models/AppRepoRequest";
 import connectToDatabase from "@/api/middlewares/connectToDatabase";
 import validateUser from "@/api/middlewares/validateUser";
+import { sendNotification } from "@/api/util";
 import { sendError, sendResponse } from "@/utils";
 import ExpressLikeNextApiHandler from "express-like-next-api-handler";
 
@@ -37,6 +38,15 @@ app.post(async (req, res) => {
       return res.status(404).json(sendError("AppRepoRequest not found"));
     }
 
+    const sendNotifi = () => {
+      const heading = action === "accept" ? "Request accepted" : "Request rejected";
+      sendNotification(
+        heading,
+        `Your request for ${appRepo.repo.name} has been ${action}ed.`,
+        requestByEmail
+      );
+    };
+
     if (action === "accept") {
       // Add the email if not already a contributor
       if (!appRepo.contributorEmails.includes(requestByEmail)) {
@@ -50,6 +60,7 @@ app.post(async (req, res) => {
       await AppRepoRequest.deleteOne({ _id: appRepoRequest._id });
 
       // Respond with success for acceptance
+      sendNotifi();
       return res
         .status(200)
         .json(sendResponse({ message: "Request accepted and user added as collaborator" }));
@@ -57,6 +68,7 @@ app.post(async (req, res) => {
       // Delete the AppRepoRequest for rejection
       await AppRepoRequest.deleteOne({ _id: appRepoRequest._id });
 
+      sendNotifi();
       // Respond with success for rejection
       return res.status(200).json(sendResponse({ message: "Request rejected and deleted" }));
     } else {

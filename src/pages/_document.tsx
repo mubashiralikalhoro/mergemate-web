@@ -41,6 +41,7 @@ export default function Document() {
           content="Find open-source projects that align with your interests and contribute seamlessly with MergeMate."
         />
         <meta name="twitter:image" content="/logo.png" />
+        <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
       </Head>
       <body className="antialiased">
         <Main />

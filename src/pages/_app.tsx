@@ -12,6 +12,15 @@ export default function App({ Component, pageProps }: AppProps) {
   // @ts-ignore
   const Layout = Component.Layout ? Component.Layout : React.Fragment;
 
+  useEffect(() => {
+    // @ts-ignore
+    window.OneSignalDeferred.push(async function (OneSignal) {
+      await OneSignal.init({
+        appId: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID,
+      });
+    });
+  }, []);
+
   return (
     <>
       <SessionProvider>
@@ -34,8 +43,15 @@ const DataWrapper = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (session.status === "authenticated") {
       const user = session.data.user;
-      // @ts-ignore
 
+      try {
+        // @ts-ignore
+        window.OneSignalDeferred.push(async function (OneSignal) {
+          await OneSignal.login(user?.email);
+        });
+      } catch (e) {}
+
+      // @ts-ignore
       setUser(user);
     }
     console.log("session", session);

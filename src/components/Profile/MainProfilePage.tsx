@@ -296,37 +296,43 @@ const MainProfilePage = ({ repos, isMine, user }: Props) => {
                             <div className="text-xs text-gray-500">{repo.repo.watchers} Watchers</div>
                           </div>
 
-                          <div className="flex items-center mt-4 gap-2">
-                            <p className="font-bold ">Owner : </p>
-                            <div className={`font-bold`}>{repo.creatorEmail}</div>
+                          <div className="flex items-center mt-4 gap-2 text-xs md:text-base ">
+                            <p className="font-bold ">Owner: </p>
+                            <Link
+                              href={`/user/${repo.creatorEmail}`}
+                              className={` text-xs  font-medium w-fit hover:underline  md:text-base`}
+                            >
+                              {repo.creatorEmail}
+                            </Link>
+                          </div>
+                          <div className="flex items-center mt-4 gap-2 text-xs md:text-base ">
+                            <p className="font-bold ">Contributors: </p>
+                            <div className={` text-xs  font-medium w-fit  md:text-base`}>
+                              {repo.contributorEmails?.length}
+                            </div>
                           </div>
 
-                          <div className="flex items-center mt-4 gap-2">
-                            <p className="font-bold ">Contributors : </p>
-                            <div className={`font-bold`}>{repo.contributorEmails?.length}</div>
-                          </div>
-
-                          <div className="flex items-center mt-4 gap-2">
+                          <div className="flex items-center mt-4 gap-2 text-xs md:text-base ">
                             <p className="font-bold ">Difficulty: </p>
                             <div
-                              className={`text-sm font-medium border-[1px] w-fit ${
-                                repo.difficulty === "easy"
+                              className={` text-xs  font-medium border-[1px] w-fit  md:text-base ${
+                                repo?.difficulty === "easy"
                                   ? "text-green-500 border-green-500"
-                                  : repo.difficulty === "medium"
+                                  : repo?.difficulty === "medium"
                                   ? "text-yellow-500 border-yellow-500"
                                   : "text-red-500 border-red-500"
                               } p-1 rounded`}
                             >
-                              {repo.difficulty}
+                              {repo?.difficulty}
                             </div>
                           </div>
 
-                          <div className="flex items-center mt-4 gap-2 flex-wrap">
+                          <div className="flex items-center mt-4 gap-2 flex-wrap text-xs sm:text-base">
                             <p className="font-bold ">Tech Stack: </p>
-                            {repo.technologies.map((item) => (
+                            {repo?.technologies.map((item) => (
                               <div
                                 key={item}
-                                className={`text-sm font-medium border-[1px] w-fit text-grayed-out border-grayed-out p-1 rounded`}
+                                className={` text-xs md:text-sm font-medium border-[1px] w-fit text-grayed-out border-grayed-out p-1 rounded`}
                               >
                                 {item}
                               </div>
