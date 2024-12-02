@@ -41,6 +41,28 @@ export const getAppRepoFromApi = async (props: {
   return repos?.data?.data;
 };
 
+export const getContributingAppRepoFromApi = async (props: {
+  userEmail: string;
+}): Promise<GetAppRepoFromApiReturn> => {
+  const { userEmail } = props;
+
+  let url = `${apiEndPoints.APP_REPO_CONTRIBUTING}?page=1&limit=100000000&userEmail=${userEmail}`;
+
+  const [repos, error] = await api.app.get<any>(`${url}`);
+
+  if (error) {
+    console.log("error -> ", error);
+    return {
+      repos: [],
+      total: 0,
+      page: 1,
+      limit: 100000000,
+    };
+  }
+
+  return repos?.data?.data;
+};
+
 interface RequestForAppRepoProps {
   appRepoId: string;
   requestByEmail: string;

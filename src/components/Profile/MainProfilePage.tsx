@@ -9,8 +9,9 @@ import AddRepoModal from "@/components/Modals/AddRepoModal";
 import useLoader from "@/hooks/useLoader";
 import apiEndPoints from "@/constants/apiEndPoints";
 import notify from "@/utils/notify";
-import { getAppRepoFromApi } from "@/utils/api-helpers";
+import { getAppRepoFromApi, getContributingAppRepoFromApi } from "@/utils/api-helpers";
 import Head from "next/head";
+import Loader from "../Global/Loader";
 
 const options = ["Contributing To", "Seeking Contributors", "Github Repositories"];
 
@@ -21,7 +22,16 @@ interface Props {
 }
 
 const MainProfilePage = ({ repos, isMine, user }: Props) => {
+  const [appRepoLoading, setAppRepoLoading] = React.useState(true);
   const [appRepoData, setAppRepoData] = React.useState<GetAppRepoFromApiReturn>({
+    repos: [],
+    total: 0,
+    page: 1,
+    limit: 10,
+  });
+
+  const [appRepoContLoading, setAppRepoContLoading] = React.useState(true);
+  const [appRepoContData, setAppRepoContData] = React.useState<GetAppRepoFromApiReturn>({
     repos: [],
     total: 0,
     page: 1,
@@ -37,10 +47,26 @@ const MainProfilePage = ({ repos, isMine, user }: Props) => {
     getAppRepoFromApi({
       creatorEmail: user?.email,
       limit: 1000000,
-    }).then((res) => {
-      console.log("res -> ", res);
-      setAppRepoData(res);
-    });
+    })
+      .then((res) => {
+        console.log("res -> ", res);
+        setAppRepoData(res);
+      })
+      .finally(() => {
+        setAppRepoLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    getContributingAppRepoFromApi({
+      userEmail: user?.email!,
+    })
+      .then((res) => {
+        setAppRepoContData(res);
+      })
+      .finally(() => {
+        setAppRepoContLoading(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -102,11 +128,11 @@ const MainProfilePage = ({ repos, isMine, user }: Props) => {
               </div>
               <p className="text-gray-400 mt-3">{user?.githubProfile.bio}</p>
             </div>
-            {isMine && (
+            {/* {isMine && (
               <div className="p-4 rounded-full border  border-gray-1 hover:bg-background-focused cursor-pointer">
                 <FaPen className="text-lg cursor-pointer hover:scale-110" />
               </div>
-            )}
+            )} */}
           </div>
         </div>
 
@@ -176,6 +202,7 @@ const MainProfilePage = ({ repos, isMine, user }: Props) => {
                     </div>
                   )}
                 </div>
+                {appRepoLoading && <Loader className="text-4xl w-full my-2" />}
                 <ul className="space-y-4">
                   {appRepoData?.repos?.map((repo, index) => (
                     <li key={index} className="my-container p-2 px-4 rounded-lg ">
@@ -229,6 +256,83 @@ const MainProfilePage = ({ repos, isMine, user }: Props) => {
                             <p className="font-bold ">Description</p>
                             <p className="text-grayed-out">{repo?.description}</p>
                           </div>
+                          <p className="text-gray-500 text-xs mt-2">
+                            {new Date(repo.repo.created_at).toDateString().substring(4)}
+                          </p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Link
+                            href={repo.repo.html_url}
+                            target="_blank"
+                            className="hover:scale-110 duration-300"
+                          >
+                            <FaGithub className="text-4xl " />
+                          </Link>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {activeSection === options[0] && (
+              <div className="p-2">
+                <div className="flex items-center justify-between mb-2">
+                  <h1 className="text-2xl font-bold">Repository</h1>
+                </div>
+                {appRepoContLoading && <Loader className="text-4xl w-full my-2" />}
+                <ul className="space-y-4">
+                  {appRepoContData?.repos?.map((repo, index) => (
+                    <li key={index} className="my-container p-2 px-4 rounded-lg ">
+                      <div className="flex justify-between items-center gap-4">
+                        <div>
+                          <h3 className="text-lg font-semibold">{repo.repo.name}</h3>
+                          <p className="text-gray-500">{repo.description}</p>
+
+                          <div className="flex items-center space-x-2">
+                            <div className="text-xs text-gray-500">{repo.repo.forks_count} Forks</div>
+                            <div className="text-xs text-gray-500">{repo.repo.stargazers_count} Stars</div>
+                            <div className="text-xs text-gray-500">{repo.repo.watchers} Watchers</div>
+                          </div>
+
+                          <div className="flex items-center mt-4 gap-2">
+                            <p className="font-bold ">Owner : </p>
+                            <div className={`font-bold`}>{repo.creatorEmail}</div>
+                          </div>
+
+                          <div className="flex items-center mt-4 gap-2">
+                            <p className="font-bold ">Contributors : </p>
+                            <div className={`font-bold`}>{repo.contributorEmails?.length}</div>
+                          </div>
+
+                          <div className="flex items-center mt-4 gap-2">
+                            <p className="font-bold ">Difficulty: </p>
+                            <div
+                              className={`text-sm font-medium border-[1px] w-fit ${
+                                repo.difficulty === "easy"
+                                  ? "text-green-500 border-green-500"
+                                  : repo.difficulty === "medium"
+                                  ? "text-yellow-500 border-yellow-500"
+                                  : "text-red-500 border-red-500"
+                              } p-1 rounded`}
+                            >
+                              {repo.difficulty}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center mt-4 gap-2 flex-wrap">
+                            <p className="font-bold ">Tech Stack: </p>
+                            {repo.technologies.map((item) => (
+                              <div
+                                key={item}
+                                className={`text-sm font-medium border-[1px] w-fit text-grayed-out border-grayed-out p-1 rounded`}
+                              >
+                                {item}
+                              </div>
+                            ))}
+                          </div>
+
                           <p className="text-gray-500 text-xs mt-2">
                             {new Date(repo.repo.created_at).toDateString().substring(4)}
                           </p>
