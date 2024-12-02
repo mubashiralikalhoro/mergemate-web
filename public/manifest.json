@@ -1,0 +1,21 @@
+{
+  "name": "MergeMate",
+  "short_name": "MergeMate",
+  "description": "A platform that connects developers with open-source projects, making contributions seamless and exciting.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#317EFB",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
