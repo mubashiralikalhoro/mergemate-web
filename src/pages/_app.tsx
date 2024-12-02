@@ -13,12 +13,16 @@ export default function App({ Component, pageProps }: AppProps) {
   const Layout = Component.Layout ? Component.Layout : React.Fragment;
 
   useEffect(() => {
-    // @ts-ignore
-    window.OneSignalDeferred.push(async function (OneSignal) {
-      await OneSignal.init({
-        appId: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID,
+    try {
+      // @ts-ignore
+      window.OneSignalDeferred.push(async function (OneSignal) {
+        await OneSignal.init({
+          appId: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID,
+        });
       });
-    });
+    } catch (e) {
+      console.log("OneSignal Error -> ", e);
+    }
   }, []);
 
   return (
