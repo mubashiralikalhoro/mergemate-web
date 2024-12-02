@@ -1,5 +1,6 @@
 import axios from "axios";
 import User from "../db/models/User";
+import Notification from "../db/models/Notification";
 
 export const getUserFromDB = async (
   email: string
@@ -27,23 +28,27 @@ export const getUserFromDB = async (
 
 export const sendNotification = async (heading: string, content: string, email: string) => {
   console.log("Sending Notification...", heading, content, email);
-
   const data = {
     heading,
     content,
   };
 
+  try {
+    await new Notification({
+      email,
+      heading,
+      content,
+      additionalData: data,
+    }).save();
+  } catch (e: any) {
+    console.log("Error saving notification to db", e.message);
+  }
+
   const url = `${process.env.NEXT_PUBLIC_BASE_URL}/notifications`;
 
   const body = {
     app_id: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID,
-    // target_channel: "push",
-    // include_aliases: {
-    //   external_id: [email],
-    // },
-
-    included_segments: ["All"],
-
+    include_external_user_ids: [email],
     contents: {
       en: content,
     },
