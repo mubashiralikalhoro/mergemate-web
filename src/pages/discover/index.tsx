@@ -4,13 +4,32 @@ import Card from "@/components/Cards/SwipeCards";
 import AppLayout from "@/components/layout/AppLayout";
 import useScrollController from "@/hooks/useScrollController";
 import { IoReload } from "react-icons/io5";
-import { getAppRepoFromApi } from "@/utils/api-helpers";
+import { getAppRepoFromApi, requestForAppRepo } from "@/utils/api-helpers";
 import Loader from "@/components/Global/Loader";
 import { NextPageContext } from "next";
 import getSession from "@/utils/getServerSession";
 import { toAuthPage } from "@/utils";
+import { useUserContext } from "@/context/UserContext";
+import notify from "@/utils/notify";
+import useLoader from "@/hooks/useLoader";
 
 const Home = () => {
+  const { user } = useUserContext();
+
+  const rightSwipe = (card: AppRepo) => {
+    requestForAppRepo({ appRepoId: card._id, requestByEmail: user?.email!, requestByName: user?.name! }).then(
+      ({ error, request }) => {
+        if (error) {
+          notify.error(error || "Failed to request the app");
+          return;
+        }
+
+        notify.success("Request sent successfully");
+      }
+    );
+  };
+
+  // handling the swipe logic
   const [cards, setCards] = useState<AppRepo[]>([]);
 
   const [isLoading, setLoading] = useState(true);
@@ -39,6 +58,10 @@ const Home = () => {
         return card._id !== oldCard._id;
       })
     );
+
+    if (swipe === "like") {
+      rightSwipe(oldCard);
+    }
   };
   const undoSwipe = () => {
     const newCard = history.pop();

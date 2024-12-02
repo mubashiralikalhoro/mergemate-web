@@ -1,6 +1,7 @@
 import apiEndPoints from "@/constants/apiEndPoints";
 import api from "./api";
 import notify from "./notify";
+import { IAppRepoRequest } from "@/api/db/models/AppRepoRequest";
 
 export const getAppRepoFromApi = async (props: {
   page?: number;
@@ -38,4 +39,34 @@ export const getAppRepoFromApi = async (props: {
   }
 
   return repos?.data?.data;
+};
+
+interface RequestForAppRepoProps {
+  appRepoId: string;
+  requestByEmail: string;
+  requestByName: string;
+}
+
+export const requestForAppRepo = async (
+  props: RequestForAppRepoProps
+): Promise<{
+  error: any;
+  request: IAppRepoRequest | null;
+}> => {
+  console.log("props -> ", props);
+  const [res, error] = await api.app.post<any>(apiEndPoints.APP_REPO_REQUEST, props);
+
+  console.log("res -> ", res);
+
+  if (error) {
+    return {
+      error,
+      request: null,
+    };
+  }
+
+  return {
+    error: null,
+    request: res?.data,
+  };
 };

@@ -65,8 +65,8 @@ const Card: React.FC<Props> = ({ data, removeCard, active }) => {
 };
 
 const CardComponent = ({ data }: { data: AppRepo }) => (
-  <div className="w-full h-full p-4 overflow-y-auto scrollbar-hide">
-    <div className="mt-5 w-full flex items-center gap-4">
+  <div className="w-full h-full p-2 md:p-4 overflow-hidden scrollbar-hide">
+    <div className="mt-2 md:mt-5 w-full flex items-center gap-4">
       <Image
         alt="user"
         src={data?.repo?.owner?.avatar_url || "/images/user-placeholder.png"}
@@ -78,9 +78,9 @@ const CardComponent = ({ data }: { data: AppRepo }) => (
         <p className="">@{data?.repo.owner?.login}</p>
       </div>
     </div>
-    <div className="mt-6">
-      <h1 className="text-2xl font-bold">{data?.repo.name} </h1>
-      <p className="text-grayed-out">{data?.repo.description}</p>
+    <div className="mt-2 md:mt-6 ">
+      <h1 className="font-bold text-sm md:text-2xl">{data?.repo.name} </h1>
+      <p className="text-grayed-out text-xs md:text-base">{data?.repo.description}</p>
     </div>
     <div className="flex items-center space-x-2">
       <div className="text-xs text-gray-500">{data.repo.forks} Forks</div>
@@ -89,11 +89,11 @@ const CardComponent = ({ data }: { data: AppRepo }) => (
     </div>
     <p className="text-gray-500 text-xs mt-2">{new Date(data.repo.created_at).toDateString().substring(4)}</p>
 
-    <div className="bg-gray-1 w-full h-[1px] mt-4" />
-    <div className="flex items-center mt-4 gap-2">
+    <div className="bg-gray-1 w-full h-[1px] mt-4 " />
+    <div className="flex items-center mt-4 gap-2 text-xs md:text-base ">
       <p className="font-bold ">Difficulty: </p>
       <div
-        className={`text-sm font-medium border-[1px] w-fit ${
+        className={` text-xs  font-medium border-[1px] w-fit  md:text-base ${
           data?.difficulty === "easy"
             ? "text-green-500 border-green-500"
             : data?.difficulty === "medium"
@@ -105,12 +105,12 @@ const CardComponent = ({ data }: { data: AppRepo }) => (
       </div>
     </div>
 
-    <div className="flex items-center mt-4 gap-2 flex-wrap">
+    <div className="flex items-center mt-4 gap-2 flex-wrap text-xs sm:text-base">
       <p className="font-bold ">Tech Stack: </p>
       {data?.technologies.map((item) => (
         <div
           key={item}
-          className={`text-sm font-medium border-[1px] w-fit text-grayed-out border-grayed-out p-1 rounded`}
+          className={` text-xs md:text-sm font-medium border-[1px] w-fit text-grayed-out border-grayed-out p-1 rounded`}
         >
           {item}
         </div>
@@ -118,12 +118,12 @@ const CardComponent = ({ data }: { data: AppRepo }) => (
     </div>
     <div className="bg-gray-1 w-full h-[1px] mt-4" />
 
-    <div className="mt-5">
+    <div className="mt-5 text-xs md:text-base">
       <p className="font-bold ">Contribution Guidelines</p>
       <p className="text-grayed-out">{data?.contributionGuidelines}</p>
     </div>
 
-    <div className="mt-5">
+    <div className="mt-5 text-xs md:text-base">
       <p className="font-bold ">Description</p>
       <p className="text-grayed-out">{data?.description}</p>
     </div>
