@@ -1,5 +1,6 @@
 import { PanInfo, motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 interface Props {
@@ -65,7 +66,12 @@ const Card: React.FC<Props> = ({ data, removeCard, active }) => {
 };
 
 const CardComponent = ({ data }: { data: AppRepo }) => (
-  <div className="w-full h-full p-2 md:p-4 overflow-hidden scrollbar-hide">
+  <div
+    className="w-full h-full p-2 md:p-4 overflow-hidden scrollbar-hide"
+    onDoubleClick={() => {
+      window.open(data.repo.html_url);
+    }}
+  >
     <div className="mt-2 md:mt-5 w-full flex items-center gap-4">
       <Image
         alt="user"

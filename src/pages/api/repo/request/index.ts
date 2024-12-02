@@ -55,7 +55,9 @@ app.get(async (req, res) => {
     const userRepoIds = userRepos.map((repo) => repo._id);
 
     // Fetch all requests for the user's repositories
-    const requests = await AppRepoRequest.find({ appRepo: { $in: userRepoIds } }).populate("appRepo");
+    const requests = await AppRepoRequest.find({ appRepo: { $in: userRepoIds } })
+      .populate("appRepo")
+      .sort({ _id: -1 });
 
     // If no requests are found, return an appropriate message
     if (!requests || requests.length === 0) {

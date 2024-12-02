@@ -1,13 +1,63 @@
 import Loader from "@/components/Global/Loader";
 import toast from "react-hot-toast";
+import { FaCheck } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 
 const notify = {
   success: (message: string) => {
-    return toast.success(message);
+    toast.custom(
+      (t) => (
+        <div
+          className={`${
+            t.visible ? "scale-100  opacity-100" : "scale-0 opacity-0"
+          } max-w-md w-fit duration-500 gap-5  bg-background-focused my-container shadow-lg items-center p-2 pr-3 flex`}
+        >
+          {t.visible && <FaCheck />}
+
+          {t.visible && (
+            <div
+              style={{
+                marginLeft: 10,
+              }}
+              className=""
+            >
+              {message}
+            </div>
+          )}
+        </div>
+      ),
+      {
+        duration: 2000,
+      }
+    );
   },
 
   error: (message: string) => {
-    toast.error(message);
+    toast.custom(
+      (t) => (
+        <div
+          className={`${
+            t.visible ? "scale-100  opacity-100" : "scale-0 opacity-0"
+          } max-w-md w-fit duration-500 gap-5  bg-background-focused my-container shadow-lg items-center p-2 pr-3 flex`}
+        >
+          {t.visible && <RxCross2 />}
+
+          {t.visible && (
+            <div
+              style={{
+                marginLeft: 10,
+              }}
+              className=""
+            >
+              {message}
+            </div>
+          )}
+        </div>
+      ),
+      {
+        duration: 2000,
+      }
+    );
   },
 
   loading: (message: string) => {

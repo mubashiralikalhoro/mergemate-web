@@ -12,11 +12,11 @@ app.use(validateUser);
 
 app.post(async (req, res) => {
   try {
-    const { appRepoId, requestByEmail, action } = req.body;
+    const { appRepoId, requestByEmail, action, requestId } = req.body;
 
     // Validate request body
-    if (!appRepoId || !requestByEmail || !action) {
-      throw new Error("appRepoId, requestByEmail, and action are required");
+    if (!appRepoId || !requestByEmail || !action || !requestId) {
+      throw new Error("appRepoId, requestByEmail, requestId, and action are required");
     }
 
     // Find the AppRepo to validate the creator
@@ -32,7 +32,7 @@ app.post(async (req, res) => {
     }
 
     // Find the AppRepoRequest
-    const appRepoRequest = await AppRepoRequest.findOne({ appRepoId, requestByEmail });
+    const appRepoRequest = await AppRepoRequest.findOne({ _id: requestId });
     if (!appRepoRequest) {
       return res.status(404).json(sendError("AppRepoRequest not found"));
     }

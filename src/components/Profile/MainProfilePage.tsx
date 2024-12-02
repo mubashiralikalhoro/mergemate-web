@@ -12,7 +12,7 @@ import notify from "@/utils/notify";
 import { getAppRepoFromApi } from "@/utils/api-helpers";
 import Head from "next/head";
 
-const options = ["Contributing To", "Seeking Contributors", "My Repositories"];
+const options = ["Contributing To", "Seeking Contributors", "Github Repositories"];
 
 interface Props {
   repos: Repository[];
@@ -58,7 +58,7 @@ const MainProfilePage = ({ repos, isMine, user }: Props) => {
     console.log("res -> ", res, error);
 
     if (error) {
-      notify.error("Failed to add repo");
+      notify.error(error);
       return false;
     }
 
@@ -115,7 +115,7 @@ const MainProfilePage = ({ repos, isMine, user }: Props) => {
             <h2
               onClick={() => setActiveSection(section)}
               className={classNames(
-                "text-xl w-full text-center cursor-pointer overflow-hidden font-bold py-2 border-b-[2px] ",
+                "text-xs md:text-xl w-full text-center cursor-pointer overflow-hidden font-bold py-2 border-b-[2px] ",
                 {
                   " border-git-orange": activeSection === section,
                   "border-transparent": activeSection !== section,

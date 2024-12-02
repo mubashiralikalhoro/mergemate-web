@@ -70,3 +70,36 @@ export const requestForAppRepo = async (
     request: res?.data,
   };
 };
+
+export const getRequestsForUserRepos = async (): Promise<AppRepoRequest[]> => {
+  const [requests, error] = await api.app.get<any>(apiEndPoints.APP_REPO_REQUEST);
+
+  if (error) {
+    notify.error(error);
+    return [];
+  }
+
+  return requests?.data.data || [];
+};
+
+export const updateRequestStatus = async (
+  requestId: string,
+  appRepoId: string,
+  status: "accept" | "reject",
+  requestByEmail: string
+): Promise<boolean> => {
+  const [response, error] = await api.app.post<any>(`${apiEndPoints.APP_REPO_REQUEST_STATUS}`, {
+    requestId: requestId,
+    appRepoId: appRepoId,
+    requestByEmail,
+    action: status,
+  });
+
+  if (error) {
+    notify.error(error);
+    return false;
+  }
+
+  notify.success(`Request has been ${status}.`);
+  return true;
+};

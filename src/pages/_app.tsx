@@ -1,6 +1,8 @@
+import PageLoader from "@/components/Loaders/PageLoader";
 import Logo from "@/components/Logo";
 import UserContext from "@/context/UserContext";
 import "@/styles/globals.css";
+import notify from "@/utils/notify";
 import { SessionProvider, useSession } from "next-auth/react";
 import type { AppProps } from "next/app";
 import React, { useEffect } from "react";
@@ -46,13 +48,7 @@ const DataWrapper = ({ children }: { children: React.ReactNode }) => {
         setUser,
       }}
     >
-      {session.status === "loading" ? (
-        <div className="w-screen h-[100dvh] flex items-center justify-center">
-          <Logo className="animate-pulse" />
-        </div>
-      ) : (
-        children
-      )}
+      {session.status === "loading" ? <PageLoader /> : children}
     </UserContext.Provider>
   );
 };

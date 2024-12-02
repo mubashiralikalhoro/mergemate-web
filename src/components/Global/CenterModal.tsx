@@ -1,3 +1,4 @@
+import useScrollController from "@/hooks/useScrollController";
 import React from "react";
 import Modal from "react-modal";
 
@@ -12,16 +13,18 @@ const CenterModal = ({ isOpen, setOpen, children }: Props) => {
     setOpen(false);
   };
 
+  useScrollController(!isOpen);
+
   return (
     <Modal
       isOpen={isOpen}
-      overlayClassName="top-0 left-0 w-screen h-screen fixed bg-background bg-opacity-50 focus:outline-none outline-none"
-      className="fixed top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] z-50 focus:outline-none outline-none"
+      overlayClassName="top-0 left-0 w-screen h-screen fixed bg-background bg-opacity-50 focus:outline-none outline-none z-[9999]"
+      className="fixed top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]  focus:outline-none outline-none z-[999999]"
       closeTimeoutMS={300}
       onRequestClose={onClose}
       ariaHideApp={false}
     >
-      <div className="max-h-[95dvh] overflow-y-scroll scrollbar-hide">{children}</div>
+      <div className="max-h-[70dvh] overflow-y-scroll scrollbar-hide">{children}</div>
     </Modal>
   );
 };

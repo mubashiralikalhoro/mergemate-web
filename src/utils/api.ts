@@ -32,8 +32,9 @@ const caller = async <T>(
       response = await axiosInter[area][type](url, data, config);
     }
   } catch (err: any) {
-    response = null;
-    error = err?.response?.data?.error?.message || err?.message || "Something went wrong";
+    console.log("error", err.response.data.error);
+    const message = err.response.data.error || err.message || "Something went wrong";
+    error = message;
   }
 
   return [

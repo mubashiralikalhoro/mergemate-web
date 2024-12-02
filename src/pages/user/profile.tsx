@@ -9,10 +9,10 @@ import MainProfilePage from "@/components/Profile/MainProfilePage";
 
 interface Props {
   repos: Repository[];
+  user: User;
 }
 
-const ProfilePage = ({ repos }: Props) => {
-  const { user } = useUserContext();
+const ProfilePage = ({ repos, user }: Props) => {
   return <MainProfilePage isMine={true} repos={repos} user={user!} />;
 };
 
@@ -31,6 +31,7 @@ export const getServerSideProps = async (context: NextPageContext) => {
   return {
     props: {
       repos: repos?.data || [],
+      user,
     },
   };
 };

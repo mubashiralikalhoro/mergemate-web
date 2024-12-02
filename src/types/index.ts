@@ -142,3 +142,12 @@ interface GetAppRepoFromApiReturn {
 }
 
 type SwipeType = "like" | "nope" | "superlike";
+
+interface AppRepoRequest {
+  _id: string;
+  key?: string;
+  requestByEmail?: string;
+  requestByName?: string;
+  name?: string;
+  appRepo: AppRepo;
+}

@@ -4,6 +4,7 @@ import ExpressLikeNextApiHandler from "express-like-next-api-handler";
 import AppRepo from "@/api/db/models/AppRepo";
 import { sendError, sendResponse } from "@/utils";
 import { AppRepoSchema } from "@/constants/schema";
+import AppRepoRequest from "@/api/db/models/AppRepoRequest";
 
 const { app, handler } = ExpressLikeNextApiHandler();
 
@@ -13,10 +14,20 @@ app.use(validateUser);
 app.get(async (req, res) => {
   try {
     const { page = 1, limit = 10, creatorEmail } = req.query;
+    // @ts-ignore
+    const userEmail = req.user.email;
 
     const query: any = {};
+    console.log("creatorEmail -> ", creatorEmail);
     if (creatorEmail) {
       query.creatorEmail = creatorEmail;
+    } else {
+      // Get all repo IDs where the user's email exists in AppRepoRequest
+      const reposWithRequests = await AppRepoRequest.find({ requestByEmail: userEmail }).distinct("appRepo");
+
+      // Exclude repos where the current user is the creator or where requests exist for the user
+      query._id = { $nin: reposWithRequests }; // Exclude repos with requests
+      query.creatorEmail = { $ne: userEmail }; // Exclude repos created by the current user
     }
 
     const repos = await AppRepo.find(query)
