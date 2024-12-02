@@ -27,7 +27,7 @@ const Card: React.FC<Props> = ({ data, removeCard, active }) => {
       removeCard(data, "nope");
     }
   };
-  const classNames = `absolute aspect-[3/4] max-w-lg  w-[90vw] bg-background-focused my-container shadow-xl rounded-2xl flex flex-col justify-center items-center cursor-grab`;
+  const classNames = `absolute aspect-[3.5/4] max-w-lg  w-[90vw] bg-background-focused my-container shadow-xl rounded-2xl flex flex-col justify-center items-center cursor-grab`;
 
   return (
     <>
@@ -65,7 +65,7 @@ const Card: React.FC<Props> = ({ data, removeCard, active }) => {
 };
 
 const CardComponent = ({ data }: { data: AppRepo }) => (
-  <div className="w-full h-full p-4 overflow-y-scroll scrollbar-hide ">
+  <div className="w-full h-full p-4 overflow-y-auto scrollbar-hide">
     <div className="mt-5 w-full flex items-center gap-4">
       <Image
         alt="user"

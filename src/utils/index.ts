@@ -1,3 +1,5 @@
+import { redirect } from "next/dist/server/api-utils";
+
 export const toAuthPage = {
   redirect: {
     destination: "/auth/login",
@@ -8,6 +10,13 @@ export const toAuthPage = {
 export const toProfilePage = {
   redirect: {
     destination: "/user/profile",
+    permanent: false,
+  },
+};
+
+export const toHomePage = {
+  redirect: {
+    destination: "/discover",
     permanent: false,
   },
 };

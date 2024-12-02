@@ -72,12 +72,12 @@ const Home = () => {
           <div className="flex flex-col items-center space-y-2">
             <button
               disabled={history.length === 0}
-              className="w-14 h-14 rounded-full  bg-background-focused inline-flex justify-center items-center disabled:cursor-not-allowed"
+              className="w-14 h-14 rounded-full  bg-grayed-out inline-flex justify-center items-center disabled:cursor-not-allowed"
               onClick={undoSwipe}
               data-testid="undo-btn"
               aria-label="Undo Swipe"
             >
-              <IoReload className="text-3xl" />
+              <IoReload className="text-3xl text-background" />
             </button>
             <span className="text-xs text-white">Undo</span>
           </div>

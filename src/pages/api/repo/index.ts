@@ -1,7 +1,6 @@
 import connectToDatabase from "@/api/middlewares/connectToDatabase";
 import validateUser from "@/api/middlewares/validateUser";
 import ExpressLikeNextApiHandler from "express-like-next-api-handler";
-import * as Yup from "yup";
 import AppRepo from "@/api/db/models/AppRepo";
 import { sendError, sendResponse } from "@/utils";
 import { AppRepoSchema } from "@/constants/schema";
